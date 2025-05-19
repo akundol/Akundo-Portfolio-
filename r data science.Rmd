@@ -1,0 +1,61 @@
+---
+title: "Anova-Comparing Multiple means"
+output: html_document
+date: "2023-11-30"
+---
+Anova-Comparing Multiple means
+
+u1=ave flipper
+```{r setup, include=FALSE}
+library(palmerpenguins)
+library(tidyverse)
+```
+use the conflicted package to force all conflicts to become errors 
+```{r}
+penguins<-penguins%>%select(species, flipper=flipper_length_mm)
+```
+
+```{r}
+adelie<-penguins%>%filter(species=="Adelie")
+chinstrap<-penguins%>%filter(species=="Chinstrap")
+gentoo<-penguins%>%filter(species=="Gentoo")
+
+```
+
+```{r}
+qqnorm(adelie$flipper)
+qqline(adelie$flipper)
+```
+```{r}
+qqnorm(chinstrap$flipper)
+qqline(chinstrap$flipper)
+```
+
+```{r}
+qqnorm(gentoo$flipper)
+qqline(gentoo$flipper)
+```
+
+```{r}
+sd(adelie$flipper, na.rm = T)
+sd(chinstrap$flipper, na.rm = T)
+sd(gentoo$flipper, na.rm = T)
+```
+
+```{r}
+penguins.anova<-aov(data = penguins, flipper~species)
+summary(penguins.anova)
+```
+
+```{r}
+ggplot(penguins, aes(x=species, y= flipper, col=species))+geom_boxplot()
+```
+
+```{r}
+TukeyHSD(penguins.anova)
+```
+Confidence Intervals for difference between the mean 
+
+3.6<M1-M2<8.15
+chin-adelie 
+3.6 <M1<M2+8.15
